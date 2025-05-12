@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# Michal Sela Hackathon Project - Team 11
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Safe Area** is a map-based web application designed to help women in distress quickly find nearby safe zones where they can receive immediate support and protection.
 
-## Available Scripts
+## How to Run the Project
 
-In the project directory, you can run:
+### Running Front-End and Back-End Separately
 
-### `npm start`
+1. **Back-End**:
+   - Navigate to the `backend` directory:
+     ```bash
+     cd backend
+     ```
+   - Install dependencies:
+     ```bash
+     npm install
+     ```
+   - Run the back-end server:
+     ```bash
+     npm run dev
+     ```
+     The back-end will be available at `http://localhost:5000`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+2. **Front-End**:
+   - Navigate to the `frontend` directory:
+     ```bash
+     cd frontend
+     ```
+   - Install dependencies:
+     ```bash
+     npm install
+     ```
+   - Run the front-end application:
+     ```bash
+     npm start
+     ```
+     The front-end will be available at `http://localhost:3000`.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Running Both Front-End and Back-End Together Using `concurrently`
 
-### `npm test`
+1. Install `concurrently`:
+   - In the root directory of the project, run:
+     ```bash
+     npm install concurrently
+     ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Run both the back-end and front-end at the same time:
+   - In the root directory, execute:
+     ```bash
+     npm run dev
+     ```
+     This will start both the back-end and front-end together.
 
-### `npm run build`
+## Technologies Used
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Front-End:
+- **React**: A JavaScript library for building user interfaces, used for the client-side of the application.
+- **React-Scripts**: A package used to manage the development environment for the React application.
+- **Axios**: A promise-based HTTP client for making requests to the back-end API.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Back-End:
+- **Node.js**: JavaScript runtime built on Chrome's V8 JavaScript engine, used to create the back-end server.
+- **Express.js**: A minimal and flexible Node.js web application framework for building APIs.
+- **Nodemon**: A utility that monitors for changes in the application and automatically restarts the server.
+- **dotenv**: A zero-dependency module that loads environment variables from a `.env` file.
