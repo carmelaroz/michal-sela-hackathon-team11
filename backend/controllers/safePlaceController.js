@@ -1,0 +1,1 @@
+const SafePlace = require('../models/SafePlace');
