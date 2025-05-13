@@ -1,0 +1,108 @@
+.signup-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.signup-heading {
+    text-align: center;
+    color: #ff4e4e;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-input {
+    margin-bottom: 1rem;
+    padding: 0.7rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.signup-label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.signup-select {
+    margin-bottom: 1rem;
+    padding: 0.7rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.signup-button {
+    padding: 0.75rem;
+    background-color: #ff4e4e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.back-button {
+    padding: 0.5rem;
+    background-color: #f2f2f2;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.signup-message {
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+/* Radio Button Styling */
+.gender-field {
+    display: flex;
+    justify-content: flex-start;
+    gap: 30px; 
+    margin: 10px 0;
+}
+
+.gender-field label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+}
+
+.gender-field input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    margin-right: 6px; /* Reduced margin between radio button and label */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.gender-field input[type="radio"]:checked {
+    background-color: #ff4e4e;
+    border-color: #ff4e4e;
+}
+
+.gender-field input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
