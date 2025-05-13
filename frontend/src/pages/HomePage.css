@@ -1,0 +1,30 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.home-heading {
+    margin-bottom: 1rem;
+}
+
+.home-paragraph {
+    margin-bottom: 2rem;
+}
+
+.home-button {
+    padding: 16px 24px; 
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: #ff4e4e;
+    color: white;
+    border: none;
+    border-radius: 8px;   
+    margin-bottom: 1.2rem;
+    width: 100%;
+    max-width: 320px; 
+    cursor: pointer;
+  }
