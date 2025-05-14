@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import LoginForm from './pages/LoginForm';
 import SignupForm from './pages/SignupForm';
 import Maps from './pages/Maps.jsx';
+import MapsPage from './pages/MapsPage.jsx';
 
 
 import Profile from './components/profile'; // Import the Profile component
@@ -14,7 +15,7 @@ function App() {
       <Router>
         <Layout>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<MapsPage />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/profile" element={<Profile />} />
