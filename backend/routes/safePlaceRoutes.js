@@ -1,6 +1,10 @@
 const express = require('express');
-const router = express.Router();
-const safePlaceController = require('../controllers/safePlaceController');
+const { deletePlace, updatePlace, getPlace } = require('../controllers/safePlaceController');
 
+const router = express.Router();
+
+router.delete('/', deletePlace);
+router.patch('/', updatePlace);
+router.get('/', getPlace)
 
 module.exports = router;
