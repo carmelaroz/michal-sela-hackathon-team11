@@ -15,11 +15,12 @@ function App() {
       <Router>
         <Layout>
           <Routes>
-            <Route path="/" element={<MapsPage />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/maps" element={<Maps />} />
+            {/* <Route path="/maps" element={<Maps />} /> */}
+            <Route path="/maps" element={<MapsPage />} />
             
             {/* Add more routes as needed */}
             {/* <Route path="/about" element={<About />} /> */}

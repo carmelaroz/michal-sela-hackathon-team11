@@ -98,18 +98,23 @@
 
 
 
+
+
+
 import React, { useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
 import './MapsPage.css';
+import axios from 'axios';
 
 const MapsPage = () => {
   const mapRef = useRef(null);
   const routingRef = useRef(null);
   const userMarkerRef = useRef(null);
   const [userLocation, setUserLocation] = useState(null);
+  const [safePlaces, setSafePlaces] = useState([]);
 
   const redIcon = L.icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
@@ -129,73 +134,46 @@ const MapsPage = () => {
     shadowSize: [41, 41],
   });
 
+  // פונקציה להמיר כתובת לקואורדינטות
+  const getCoordsFromAddress = async (address) => {
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+      const data = await res.json();
+      if (data && data[0]) {
+        return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) }; // מחזיר את הקואורדינטות
+      }
+    } catch (err) {
+      console.error("שגיאה בהפיכת כתובת לקואורדינטות:", err);
+      return null;
+    }
+  };
+
+  // שימוש ב-axios כדי להוריד את המקומות מהדאטה-בייס
+  const fetchSafePlaces = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/safeplaces');
+      setSafePlaces(response.data); // מחזיר את הנתונים שהתקבלו מה־API
+    } catch (err) {
+      console.error('Error fetching safe places:', err);
+    }
+  };
+
   useEffect(() => {
     if (mapRef.current) return;
 
-    const map = L.map('map').setView([32.0853, 34.7818], 13);
+    const map = L.map('map').setView([32.0853, 34.7818], 13); // מיקום ברירת מחדל של המפה
     mapRef.current = map;
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors',
     }).addTo(map);
 
-    const geocodeAddress = async (address) => {
-      try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
-        const data = await res.json();
-        if (data.length > 0) {
-          const lat = parseFloat(data[0].lat);
-          const lng = parseFloat(data[0].lon);
-          return [lat, lng];
-        }
-      } catch (err) {
-        console.error("שגיאה בגיאוקוד:", address, err);
-      }
-      return null;
-    };
+    // טוענים את המקומות מהדאטה-בייס
+    fetchSafePlaces();
 
-    const fetchAddresses = async () => {
-      try {
-        const res = await fetch('http://localhost:5000/api/safeplaces');
-        const data = await res.json();
-        for (const place of data) {
-          if (place.address) {
-            const coords = await geocodeAddress(place.address);
-            if (coords) {
-              const marker = L.marker(coords, { icon: blueIcon }).addTo(map);
-              marker.bindPopup(place.address);
-
-              marker.on('click', () => {
-                marker.openPopup();
-
-                if (userLocation) {
-                  if (routingRef.current) {
-                    map.removeControl(routingRef.current);
-                  }
-                  routingRef.current = L.Routing.control({
-                    waypoints: [
-                      L.latLng(userLocation[0], userLocation[1]),
-                      L.latLng(coords[0], coords[1])
-                    ],
-                    routeWhileDragging: false,
-                    show: false
-                  }).addTo(map);
-                } else {
-                  alert("המיקום הנוכחי שלך עדיין לא נטען");
-                }
-              });
-            }
-          }
-        }
-      } catch (err) {
-        console.error("שגיאה בטעינת כתובות:", err);
-      }
-    };
-
-    fetchAddresses();
-
+    // פוקנציה לצפות במיקום המשתמש
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition((position) => {
+      navigator.geolocation.watchPosition(async (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
@@ -203,14 +181,13 @@ const MapsPage = () => {
 
         if (!userMarkerRef.current) {
           const marker = L.marker([lat, lng], { icon: redIcon }).addTo(map);
-          marker.bindPopup("המיקום שלי").openPopup();
+          marker.bindPopup(`המיקום שלי`).openPopup();
           userMarkerRef.current = marker;
         } else {
           userMarkerRef.current.setLatLng([lat, lng]);
         }
 
-        map.setView([lat, lng], 14);
-
+        map.setView([lat, lng], 14); // מיקום המפה משתנה בהתאם למיקום המשתמש
       }, (err) => {
         alert("לא ניתן לקבל את המיקום שלך");
       }, {
@@ -220,27 +197,40 @@ const MapsPage = () => {
       });
     }
 
-  }, []);
+    // שמירת marker של מקום בטוח ולחיצה עליהם לנבוט למיקום
+    safePlaces.forEach((place) => {
+      if (place.address) { // לוודא שהמקום מכיל כתובת
+        getCoordsFromAddress(place.address).then((coords) => {
+          if (coords) {
+            const { lat, lon } = coords;
+            const marker = L.marker([lat, lon], { icon: blueIcon }).addTo(map);
+            marker.bindPopup(place.address);
 
-  return (
-    <div style={{ position: 'relative', height: '100vh', width: '100%' }}>
-      {!userLocation && (
-        <div style={{
-          position: 'absolute',
-          top: 10,
-          left: 10,
-          zIndex: 1000,
-          background: 'white',
-          padding: '6px 12px',
-          borderRadius: '5px',
-          boxShadow: '0 0 5px rgba(0,0,0,0.3)'
-        }}>
-          טוען מיקום נוכחי...
-        </div>
-      )}
-      <div id="map" style={{ height: '100%', width: '100%' }}></div>
-    </div>
-  );
+            marker.on('click', () => {
+              if (userLocation) {
+                if (routingRef.current) {
+                  map.removeControl(routingRef.current);
+                }
+                routingRef.current = L.Routing.control({
+                  waypoints: [
+                    L.latLng(userLocation[0], userLocation[1]),
+                    L.latLng(lat, lon)
+                  ],
+                  routeWhileDragging: false,
+                  show: false
+                }).addTo(map);
+              } else {
+                alert("המיקום הנוכחי שלך עדיין לא נטען");
+              }
+            });
+          }
+        });
+      }
+    });
+
+  }, [safePlaces]); // זה יקרה כל פעם שהסייפפלייסים יתעדכנו
+
+  return <div id="map" style={{ height: '100vh', width: '100%' }}></div>;
 };
 
 export default MapsPage;
