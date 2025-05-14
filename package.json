@@ -14,5 +14,8 @@
   "description": "",
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "leaflet-routing-machine": "^3.2.12"
   }
 }
