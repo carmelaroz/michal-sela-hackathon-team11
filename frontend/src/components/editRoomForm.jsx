@@ -16,7 +16,6 @@ const fields = [
 export const EditRoomForm = () => {
     const { id } = useParams();
     const { username } = useAuthContext()
-    const [data,setData] = useState()
     const [form, setForm] = useState(
     fields.reduce((acc, item) => {
       acc[item.name] = '';
@@ -28,7 +27,14 @@ export const EditRoomForm = () => {
     () => {
 axios.get('http://localhost:5000/api/safeplaces/'+ id)
 .then((data) => {
-  setData(data.data);
+    setForm({
+        hotelName: data.data.hotelName,
+        address: data.data.address,
+        contactName: data.data.contactName,
+        contactPhone: data.data.contactPhone,
+        bookingLink: data.data.bookingLink
+      });
+//   setData(data.data);
 })}), [])
 
   const [message, setMessage] = useState('');
@@ -40,9 +46,10 @@ axios.get('http://localhost:5000/api/safeplaces/'+ id)
   };
 
   const handleEdit = (e) => {
+    debugger;
     e.preventDefault();
     axios
-      .patch('https://localhost:5000/api/safeplaces' + id, { ...form }, { params: { username } })
+      .patch('http://localhost:5000/api/safeplaces/' + id, form, { params: { username } })
       .then(() => {
         setMessage('Edited successfully');
         navigate('/');
@@ -51,7 +58,7 @@ axios.get('http://localhost:5000/api/safeplaces/'+ id)
 
   const handleDelete = () => {
     axios
-      .delete('https://localhost:5000/api/safeplaces' + id, { params: { username } })
+      .delete('http://localhost:5000/api/safeplaces/' + id, { params: { username } })
       .then(() => {
         setMessage('Deleted successfully');
         navigate('/');
@@ -68,7 +75,7 @@ axios.get('http://localhost:5000/api/safeplaces/'+ id)
               key={field.name}
               name={field.name}
               placeholder={field.placeholder || field.label}
-              value={data?.[field.name]|| form[field.name]}
+              value={form[field.name]}
               onChange={handleChange}
               className={"login-input"}
             />
@@ -78,7 +85,7 @@ axios.get('http://localhost:5000/api/safeplaces/'+ id)
               type={field.type || 'text'}
               name={field.name}
               placeholder={field.placeholder || field.label}
-              value={data?.[field.name]|| form[field.name]}
+              value={form?.[field.name]}
               onChange={handleChange}
               className={"login-input"}
             />

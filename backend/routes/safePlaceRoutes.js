@@ -3,8 +3,8 @@ const { deletePlace, updatePlace, getPlace } = require('../controllers/safePlace
 
 const router = express.Router();
 
-router.delete('/', deletePlace);
-router.patch('/', updatePlace);
-router.get('/', getPlace)
+router.delete('/:id', deletePlace);
+router.patch('/:id', updatePlace);
+router.get('/:id', getPlace)
 
 module.exports = router;

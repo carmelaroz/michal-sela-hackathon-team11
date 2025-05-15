@@ -1,4 +1,5 @@
 const SafePlace = require('../models/SafePlace');
+const mongoose = require('mongoose');
 
 const getId = (id) => {
     return id? new mongoose.Types.ObjectId(id): '';
@@ -10,11 +11,10 @@ const deletePlace = async (req, res) => {
         return res.status(400).json({ message: 'Invalid ID format' });
       }
     try {
-        const result = await SafePlace.deleteOne({ _id: updatedId, submittedBy: userId})
+        const result = await SafePlace.deleteOne({ _id: updatedId})
         if (result.deletedCount === 0) {
           return res.status(404).json({ message: 'Place not found or already deleted.' });
         }
-    
         return res.status(200).json({ message: 'Place deleted successfully.' });
       } catch (error) {
         return res.status(500).json({ message: 'Error deleting Place', error: error.message });
@@ -25,7 +25,7 @@ const deletePlace = async (req, res) => {
 
 const getPlace = async (req, res) => {
         const { id } = req.params;
-        const updatedId = getId();
+        const updatedId = getId(id);
         if (!mongoose.Types.ObjectId.isValid(updatedId)) {
             return res.status(400).json({ message: 'Invalid ID format' });
           }
@@ -46,21 +46,21 @@ const getPlace = async (req, res) => {
 
 //patch/post
 const updatePlace = async(req, res) => {
-    const {id, userId} = req.params
+    const {id} = req.params
     const updatedId = getId(id)
-    const { data } = req.data
+    const data = req.data
 
      
-    if(mongoose.Types.ObjectId.isValid(updatedId)) {
+    if(!mongoose.Types.ObjectId.isValid(updatedId)) {
         return res.status(400).json({ message: 'Invalid ID format' });
       }
 
     try {
-        const result = await SafePlace.findOneAndUpdate({ _id: updatedId, submittedBy: userId }, data,  { new: true })
+        const result = await SafePlace.findOneAndUpdate({ _id: updatedId}, {$set: data},  { new: true })
         if (result.deletedCount === 0) {
           return res.status(404).json({ message: 'Place not found or already deleted.' });
         }
-        return res.status(200).json({ message: 'Place deleted successfully.' });
+        return res.status(200).json({ message: 'Place updated successfully.' });
       } catch (error) {
         return res.status(500).json({ message: 'Error deleting Place', error: error.message });
       }
